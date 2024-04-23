@@ -1,6 +1,11 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class CriarExercicio extends JFrame {
 
@@ -9,21 +14,25 @@ public class CriarExercicio extends JFrame {
     private JButton facilButton;
     private JButton medioButton;
     private JButton dificilButton;
-    private JTextArea textArea1;
-    private JTextArea textArea2;
     private JComboBox comboBox1;
+    private JTextArea textArea1;
+    private JComboBox comboBox2;
     private String dificuldade;
 
     public CriarExercicio(String title){
         super(title);
-
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+
         setContentPane(painelPrincipal);
         pack();
+
         facilButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dificuldade = "Fácil";
+                facilButton.setBackground(Color.GREEN);
+                medioButton.setBackground(Color.WHITE);
+                dificilButton.setBackground(Color.WHITE);
             }
         });
 
@@ -31,7 +40,53 @@ public class CriarExercicio extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dificuldade = "Médio";
+                facilButton.setBackground(Color.WHITE);
+                medioButton.setBackground(Color.YELLOW);
+                dificilButton.setBackground(Color.WHITE);
             }
+        });
+
+        dificilButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dificuldade = "Difícil";
+                dificilButton.setBackground(Color.RED);
+                medioButton.setBackground(Color.WHITE);
+                facilButton.setBackground(Color.WHITE);
+            }
+        });
+
+        guardarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (textArea1.getText().trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Erro: Não foi encontrado um nome", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    String nomeExercicio = textArea1.getText();
+                    String grupoMuscular = comboBox2.getSelectedItem().toString();
+                    String materiais = comboBox1.getSelectedItem().toString();
+
+
+                    try {
+                        File file = new File("infoExercicios.txt");
+                        FileWriter fileWriter = new FileWriter(file, true);
+                        PrintWriter writer = new PrintWriter(fileWriter);
+
+                        writer.println("--------------------");
+                        writer.println("Exercicio 1: " + nomeExercicio);
+                        writer.println("Grupo Muscular: " + grupoMuscular);
+                        writer.println("Materiais: " + materiais);
+
+                        writer.close();
+
+                        JOptionPane.showMessageDialog(null, "Exercicio guardado com sucesso!");
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+
+                }
+            }
+
         });
 
         comboBox1.addItem("Costas");
@@ -42,26 +97,16 @@ public class CriarExercicio extends JFrame {
         comboBox1.addItem("LowerBody");
         comboBox1.addItem("FullBody");
         comboBox1.addItem("Core");
-        dificilButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dificuldade = "Difícil";
-            }
-        });
 
-        guardarButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String exerciseName = textArea1.getText();
-                String muscleGroup = textArea2.getText();
-                String materials = comboBox1.getSelectedItem().toString();
+        comboBox2.addItem("Polia");
+        comboBox2.addItem("Cabos");
+        comboBox2.addItem("Halteres");
+        comboBox2.addItem("Barra");
+        comboBox2.addItem("Elásticos");
+        comboBox2.addItem("Bola Medicinal");
+        comboBox2.addItem("Nenhum");
 
-                System.out.println("\nExercise Name: " + exerciseName);
-                System.out.println("Muscle Group: " + muscleGroup);
-                System.out.println("Materials: " + materials);
-                System.out.println("Difficulty: " + dificuldade);
-            }
-        });
+
     }
     public static void main(String[] args){
         JFrame frame = new CriarExercicio("Criar Exercicio");
