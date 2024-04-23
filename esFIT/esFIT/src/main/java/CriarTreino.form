@@ -7,8 +7,8 @@
     </constraints>
     <properties>
       <enabled value="true"/>
-      <minimumSize width="800" height="600"/>
-      <preferredSize width="800" height="600"/>
+      <minimumSize width="700" height="400"/>
+      <preferredSize width="700" height="400"/>
     </properties>
     <border type="none" title="Criar Treino"/>
     <children>
